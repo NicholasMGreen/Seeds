@@ -3,3 +3,9 @@
 .dolt/
 *.db
 .beads-credential-key
+
+# Seeds
+node_modules/
+dist/
+.env
+bun.lockb
