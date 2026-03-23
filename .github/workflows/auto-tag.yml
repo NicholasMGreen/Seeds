@@ -1,0 +1,57 @@
+name: Auto-Tag
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  auto-tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Read version from package.json
+        id: pkg_version
+        run: |
+          VERSION=$(bun -e "const pkg = require('./package.json'); console.log(pkg.version)")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Verify versions match
+        run: |
+          PKG_VERSION="${{ steps.pkg_version.outputs.version }}"
+          SRC_VERSION=$(grep -oP 'const VERSION\s*=\s*"\K[^"]+' src/index.ts)
+          if [ "$PKG_VERSION" != "$SRC_VERSION" ]; then
+            echo "Version mismatch: package.json=$PKG_VERSION, src/index.ts=$SRC_VERSION"
+            exit 1
+          fi
+          echo "Versions match: $PKG_VERSION"
+
+      - name: Check if tag exists
+        id: tag_check
+        run: |
+          VERSION="${{ steps.pkg_version.outputs.version }}"
+          if git tag --list | grep -q "^v${VERSION}$"; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create tag and release
+        if: steps.tag_check.outputs.exists == 'false'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ steps.pkg_version.outputs.version }}"
+          git tag "v${VERSION}"
+          git push origin "v${VERSION}"
+          gh release create "v${VERSION}" \
+            --title "v${VERSION}" \
+            --generate-notes
