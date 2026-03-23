@@ -18,7 +18,7 @@ const indexPath = new URL("../src/index.ts", import.meta.url).pathname;
 const pkg = JSON.parse(await Bun.file(pkgPath).text()) as { version: string };
 const oldVersion = pkg.version;
 const parts = oldVersion.split(".").map(Number);
-if (parts.length !== 3 || parts.some(isNaN)) {
+if (parts.length !== 3 || parts.some(Number.isNaN)) {
 	console.error(`Invalid version in package.json: ${oldVersion}`);
 	process.exit(1);
 }
@@ -58,6 +58,6 @@ console.log("Next steps:");
 console.log(`  1. Update CHANGELOG.md — add entry for [${nextVersion}]`);
 console.log("  2. Review and update README.md if CLI reference changed");
 console.log("  3. Review and update CLAUDE.md if structure changed");
-console.log(`  4. git add package.json src/index.ts CHANGELOG.md`);
+console.log("  4. git add package.json src/index.ts CHANGELOG.md");
 console.log(`  5. git commit -m "chore: release v${nextVersion}"`);
 console.log("  6. Push to main — auto-tag workflow will create the release");
