@@ -11,7 +11,7 @@
 		"exactOptionalPropertyTypes": false,
 		"skipLibCheck": true,
 		"outDir": "./dist",
-		"rootDir": "./src",
+		"rootDir": ".",
 		"types": ["bun-types"]
 	},
 	"include": ["src/**/*", "scripts/**/*"],
