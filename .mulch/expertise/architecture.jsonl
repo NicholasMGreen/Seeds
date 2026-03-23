@@ -1,0 +1,1 @@
+{"classification":"tactical","recorded_at":"2026-03-23T05:35:03.282Z","tags":["merge-conflict"],"evidence":{"bead":"Seeds-6279"},"type":"pattern","name":"","description":"Merge conflict resolved at tier ai-resolve. Branch: overstory/builder-core/Seeds-6279. Agent: builder-core. Conflicting files: scripts/version-bump.ts.","id":"mx-ecd3cf"}
