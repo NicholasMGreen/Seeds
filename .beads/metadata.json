@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "server",
+  "dolt_database": "Seeds",
+  "project_id": "28fc6050-b0f6-45b4-925e-e00983b2725c"
+}
